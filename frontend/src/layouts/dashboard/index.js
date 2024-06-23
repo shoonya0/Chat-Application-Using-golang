@@ -117,12 +117,14 @@ const DashboardLayout = () => {
 
   return (
     <>
+
       {/* metrial ui component */}
       <Box p={2} sx={{ backgroundColor: theme.palette.background.paper, boxShadow: "0px 0px 2px rgba(0 ,0 ,0 ,0.25)", height: "100vh", width: 100 }}>
 
         <Stack spacing={3} direction="column" alignItems={"center"} justifyContent="space-between" sx={{ height: "100%" }}>
 
           <Stack alignItems={"center"} spacing={4}>
+            {/* Logo */}
             <Box sx={{
               backgroundColor: theme.palette.primary.main,
               height: 64,
@@ -132,6 +134,7 @@ const DashboardLayout = () => {
               <img src={Logo} alt={"Chat app logo"} />
             </Box>
 
+            {/* Nav Buttons */}
             <Stack spacing={3} sx={{ width: "max-content" }} alignItems={"center"} direction={"column"}>
               {/* here we have imported and ther rendering our icon by using metarial Ui component*/}
               {Nav_Buttons.map((el) => (
@@ -143,6 +146,8 @@ const DashboardLayout = () => {
                   <IconButton onClick={() => setSelected(el.index)} sx={{ width: "max-content", color: theme.palette.mode === "light" ? "#000" : theme.palette.text.primary }} key={el.index}> {el.icon} </IconButton>
 
               ))}
+
+
               {/* matrial Ui component used to devide by making an horizontal or vertical line */}
               <Divider sx={{ width: "48px" }} />
               {/* here i have created an setting button */}
@@ -160,6 +165,7 @@ const DashboardLayout = () => {
             </Stack>
           </Stack>
 
+          {/* Avatar */}
           <Stack spacing={4}>
             <AntSwitch defaultChecked onChange={() => { onToggleMode() }} />
             <Avatar src={faker.image.avatar()} />

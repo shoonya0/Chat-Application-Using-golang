@@ -46,6 +46,9 @@ const Nav_Setting = [
   },
 ];
 
+
+
+// fake data for chat list
 const ChatList = [
   {
     id: 0,
