@@ -10,7 +10,7 @@ function App() {
   return (
     <ThemeProvider>
       <ThemeSettings>
-        <Box style={{ display: "flex" }}>
+        <Box >
           <Router />
         </Box>
       </ThemeSettings>

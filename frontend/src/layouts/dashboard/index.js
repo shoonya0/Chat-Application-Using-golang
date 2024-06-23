@@ -116,7 +116,7 @@ const DashboardLayout = () => {
   const [selected, setSelected] = React.useState(0);
 
   return (
-    <>
+    <Stack direction={"row"}>
 
       {/* metrial ui component */}
       <Box p={2} sx={{ backgroundColor: theme.palette.background.paper, boxShadow: "0px 0px 2px rgba(0 ,0 ,0 ,0.25)", height: "100vh", width: 100 }}>
@@ -175,7 +175,7 @@ const DashboardLayout = () => {
       </Box>
       {/* the Outlet component is used to render the children of the parent route */}
       <Outlet />
-    </>
+    </Stack>
   );
 };
 
