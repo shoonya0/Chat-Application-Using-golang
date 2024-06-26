@@ -1,7 +1,8 @@
 import React from 'react'
-import { Box, Divider, Stack, Typography, Link, IconButton } from '@mui/material'
+import { Box, Divider, Stack, Typography, Link, IconButton, Menu, MenuItem } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { DownloadSimple, Image } from 'phosphor-react';
+import { DotsThreeVertical, DownloadSimple, Image } from 'phosphor-react';
+import { Message_options } from '../../data';
 
 // the text will come from props by destructuring the props
 const TimeLine = ({ ele }) => {
@@ -11,7 +12,6 @@ const TimeLine = ({ ele }) => {
             <Divider width="46%" />
             <Typography variant="caption" sx={{ color: theme.palette.text }}>{ele.text}</Typography>
             <Divider width="46%" />
-
         </Stack>
     );
 };
@@ -27,9 +27,42 @@ const TextMessage = ({ ele }) => {
                     {ele.message}
                 </Typography>
             </Box>
+            {/*  */}
+            <MessageOptions />
         </Stack>
     )
 }
+
+const MessageOptions = () => {
+
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <>
+            <DotsThreeVertical size={20}
+                id="basic-button"
+                aria-controls={open ? 'basic-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handleClick}
+            />
+            <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button', }}>
+                <Stack spacing={1} px={1}>
+                    {Message_options.map((ele) => (
+                        <MenuItem onClick={handleClick}>{ele.title}</MenuItem>
+                    ))}
+                </Stack>
+            </Menu>
+        </>
+    );
+};
 
 // used to send images
 const MediaMessage = ({ ele }) => {
@@ -44,6 +77,7 @@ const MediaMessage = ({ ele }) => {
                     {ele.message}
                 </Typography>
             </Box>
+            <MessageOptions />
         </Stack >
     );
 };
@@ -63,6 +97,7 @@ const ReplyMsg = ({ ele }) => {
                     <Typography variant="body2" color={ele.incoming ? theme.palette.text : "#fff"}> {ele.reply} </Typography>
                 </Stack>
             </Box>
+            <MessageOptions />
         </Stack>
     )
 }
@@ -85,6 +120,7 @@ const LinkMsg = ({ ele }) => {
                     </Stack>
                 </Stack>
             </Box>
+            <MessageOptions />
         </Stack>
     )
 }
@@ -106,8 +142,8 @@ const DocMsg = ({ ele }) => {
                     <Typography variant="body2" sx={{ color: ele.incoming ? theme.palette.text : "#fff" }}>{ele.message}</Typography>
                 </Stack>
             </Box>
+            <MessageOptions />
         </Stack>
-
     )
 }
 
