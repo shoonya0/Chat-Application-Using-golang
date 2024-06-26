@@ -14,13 +14,13 @@ const Conversation = () => {
             <Header />
 
             {/* Messages */}
-            <Box sx={{ width: "100%", flexGrow: 1 }}>
+            <Box width={"100%"} sx={{ flexGrow: 1, height: "100%", overflowY: "scroll" }}>
                 <Message />
             </Box>
 
             {/* Footer of the chat such as write */}
             <Footer />
-        </Stack>
+        </Stack >
     )
 }
 
