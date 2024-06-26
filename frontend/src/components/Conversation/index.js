@@ -2,9 +2,7 @@ import React from 'react'
 import { Stack, Box } from '@mui/material'
 import Header from './Header';
 import Footer from './Footer';
-
-
-
+import Message from './Message';
 
 const Conversation = () => {
     // // here we are using the useTheme hook to get the current theme which is provided by the material ui
@@ -17,6 +15,7 @@ const Conversation = () => {
 
             {/* Messages */}
             <Box sx={{ width: "100%", flexGrow: 1 }}>
+                <Message />
             </Box>
 
             {/* Footer of the chat such as write */}
