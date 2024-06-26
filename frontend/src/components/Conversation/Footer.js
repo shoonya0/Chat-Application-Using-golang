@@ -1,7 +1,7 @@
 import React from 'react'
-import { Stack, Box, IconButton, TextField, InputAdornment } from '@mui/material'
+import { Stack, Box, IconButton, TextField, InputAdornment, Fab, Tooltip } from '@mui/material'
 import { useTheme, styled } from '@mui/material/styles'
-import { LinkSimple, PaperPlaneTilt, Smiley, } from 'phosphor-react';
+import { Camera, File, Image, LinkSimple, PaperPlaneTilt, Smiley, Sticker, User, } from 'phosphor-react';
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
 
@@ -13,18 +13,67 @@ const StyleInput = styled(TextField)(({ theme }) => ({
     }
 }))
 
+// action buttons in the footer for sending images, stickers, images, documents, and contacts
+const Action = [
+    {
+        color: "#4da5fe",
+        icon: <Image size={24} />,
+        y: 102,
+        title: "Photo/Video"
+    },
+    {
+        color: "#1b8cfe",
+        icon: <Sticker size={24} />,
+        y: 172,
+        title: "Stickers"
+    },
+    {
+        color: "#0172e4",
+        icon: <Camera size={24} />,
+        y: 242,
+        title: "Image"
+    },
+    {
+        color: "#0159b2",
+        icon: <File size={24} />,
+        y: 312,
+        title: "Document"
+    },
+    {
+        color: "#013f7f",
+        icon: <User size={24} />,
+        y: 382,
+        title: "Contact"
+    },
+];
+
 // functional component
 const ChatInput = ({ setOpenPiker }) => {
+    const [openActions, setOpenActions] = React.useState(false)
     return (
         <StyleInput fullWidth placeholder='Write a message...' variant="filled"
             InputProps={{
                 disableUnderline: true,
                 startAdornment:
-                    <InputAdornment>
-                        <IconButton>
-                            <LinkSimple />
-                        </IconButton>
-                    </InputAdornment>,
+                    <Stack sx={{ width: "max-content" }}>
+                        <Stack sx={{
+                            position: "relative",
+                            display: openActions ? "inline-block" : "none"
+                        }}>
+                            {Action.map((ele) => (
+                                <Tooltip title={ele.title} placement="right" >
+                                    <Fab sx={{ position: "absolute", top: -ele.y, backgroundColor: ele.color }}>
+                                        {ele.icon}
+                                    </Fab>
+                                </Tooltip>
+                            ))}
+                        </Stack>
+                        <InputAdornment>
+                            <IconButton onClick={() => setOpenActions((preVal) => !preVal)}>
+                                <LinkSimple />
+                            </IconButton>
+                        </InputAdornment>
+                    </Stack >,
                 endAdornment:
                     <InputAdornment>
                         <IconButton onClick={() => { setOpenPiker((prevVal) => !prevVal); }}>
@@ -34,6 +83,8 @@ const ChatInput = ({ setOpenPiker }) => {
             }} />
     );
 };
+
+
 
 const Footer = () => {
     // here we are using the useTheme hook to get the current theme which is provided by the material ui
