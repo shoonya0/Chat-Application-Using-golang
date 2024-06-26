@@ -26,8 +26,6 @@ const Message = () => {
                                 default:
                                     return <TextMessage ele={ele} />
                             }
-                            break;
-
                         default:
                             return <></>
                     }
