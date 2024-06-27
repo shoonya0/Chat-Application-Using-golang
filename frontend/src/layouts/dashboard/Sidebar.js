@@ -1,8 +1,8 @@
 import React from 'react'
-import { Avatar, Box, Divider, IconButton, Stack } from '@mui/material'
+import { Avatar, Box, Divider, IconButton, Stack, Menu, MenuItem } from '@mui/material'
 import useSettings from "../../hooks/useSettings";
 import { useTheme } from '@mui/material/styles';
-import { Nav_Buttons } from "../../data";
+import { Nav_Buttons, Profile_Menu } from "../../data";
 import { Gear } from 'phosphor-react';
 import AntSwitch from '../../components/AntSwitch';
 import Logo from "../../assets/Images/logo.ico";
@@ -21,6 +21,14 @@ const Sidebar = () => {
     // this is the react costom hook used to manage the settings
     const { onToggleMode } = useSettings();
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         // {/* metrial ui component */ }
@@ -72,10 +80,26 @@ const Sidebar = () => {
 
                 {/* Avatar */}
                 <Stack spacing={4}>
+                    {/* switch */}
                     <AntSwitch defaultChecked onChange={() => { onToggleMode() }} />
-                    <Avatar src={faker.image.avatar()} />
+                    <Avatar id="basic-button" aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick} src={faker.image.avatar()} />
+                    <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button', }}
+                        transformOrigin={{ vertical: "bottom", horizontal: "left" }} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
+                        <Stack spacing={1} px={1}>
+                            {Profile_Menu.map((ele) => (
+                                <MenuItem onClick={handleClick}>
+                                    <Stack sx={{ width: 100 }} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
+                                        <span>{ele.title}</span>
+                                        {ele.icon}
+                                    </Stack>
+                                </MenuItem>
+                            ))}
+                        </Stack>
+                    </Menu>
                 </Stack>
-
             </Stack>
         </Box >
     );
