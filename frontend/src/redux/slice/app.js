@@ -28,6 +28,7 @@ const slice = createSlice({
 export default slice.reducer;
 
 // thunk function to perform async action/function
+// here dispatch is imported from store.js to dispatch the action to the reducer
 export function ToggleSidebar() {
     return async () => {
         dispatch(slice.actions.toggleSidebar());

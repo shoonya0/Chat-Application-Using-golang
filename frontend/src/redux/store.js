@@ -13,7 +13,7 @@ const store = configureStore({
     // here we are using persistReducer to persist our data means to store our data in local storage
     reducer: persistReducer(rootPersistConfig, rootReducers),
 
-    // middleware is a function that can run before an action is dispatched to a reducer
+    // middleware is a function that can run before an action is dispatched to a reducer here immutableCheck and serializableCheck is set to false because we are using local storage to store our data
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false,
         immutableCheck: false
