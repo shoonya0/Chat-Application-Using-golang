@@ -16,22 +16,6 @@ const TimeLine = ({ ele }) => {
 	);
 };
 
-// the numerical value of material ui x * 8 = 8x px
-// the text will come from props by destructuring the props
-const TextMessage = ({ ele }) => {
-	const theme = useTheme();
-	return (
-		<Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
-			<Box p={1.5} sx={{ backgroundColor: ele.incoming ? theme.palette.background.default : theme.palette.primary.main, borderRadius: 1.5, width: "max-content", }}>
-				<Typography variant="body2" color={ele.incoming ? theme.palette.text : "#fff"}>
-					{ele.message}
-				</Typography>
-			</Box>
-			{/*  */}
-			<MessageOptions />
-		</Stack>
-	)
-}
 
 const MessageOptions = () => {
 
@@ -64,8 +48,24 @@ const MessageOptions = () => {
 	);
 };
 
+// the numerical value of material ui x * 8 = 8x px
+// the text will come from props by destructuring the props
+const TextMessage = ({ ele, menu }) => {
+	const theme = useTheme();
+	return (
+		<Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
+			<Box p={1.5} sx={{ backgroundColor: ele.incoming ? theme.palette.background.default : theme.palette.primary.main, borderRadius: 1.5, width: "max-content", }}>
+				<Typography variant="body2" color={ele.incoming ? theme.palette.text : "#fff"}>
+					{ele.message}
+				</Typography>
+			</Box>
+			{menu && <MessageOptions />}
+		</Stack>
+	)
+}
+
 // used to send images
-const MediaMessage = ({ ele }) => {
+const MediaMessage = ({ ele, menu }) => {
 	const theme = useTheme();
 	return (
 		<Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
@@ -77,13 +77,13 @@ const MediaMessage = ({ ele }) => {
 					{ele.message}
 				</Typography>
 			</Box>
-			<MessageOptions />
+			{menu && <MessageOptions />}
 		</Stack >
 	);
 };
 
 
-const ReplyMsg = ({ ele }) => {
+const ReplyMsg = ({ ele, menu }) => {
 	const theme = useTheme();
 	return (
 		<Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
@@ -97,12 +97,12 @@ const ReplyMsg = ({ ele }) => {
 					<Typography variant="body2" color={ele.incoming ? theme.palette.text : "#fff"}> {ele.reply} </Typography>
 				</Stack>
 			</Box>
-			<MessageOptions />
+			{menu && <MessageOptions />}
 		</Stack>
 	)
 }
 
-const LinkMsg = ({ ele }) => {
+const LinkMsg = ({ ele, menu }) => {
 	const theme = useTheme();
 	return (
 		<Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
@@ -120,12 +120,12 @@ const LinkMsg = ({ ele }) => {
 					</Stack>
 				</Stack>
 			</Box>
-			<MessageOptions />
+			{menu && <MessageOptions />}
 		</Stack>
 	)
 }
 
-const DocMsg = ({ ele }) => {
+const DocMsg = ({ ele, menu }) => {
 	const theme = useTheme();
 	return (
 		<Stack direction={"row"} justifyContent={ele.incoming ? "start" : "end"}>
@@ -142,7 +142,7 @@ const DocMsg = ({ ele }) => {
 					<Typography variant="body2" sx={{ color: ele.incoming ? theme.palette.text : "#fff" }}>{ele.message}</Typography>
 				</Stack>
 			</Box>
-			<MessageOptions />
+			{menu && <MessageOptions />}
 		</Stack>
 	)
 }
