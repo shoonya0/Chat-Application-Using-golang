@@ -164,7 +164,6 @@ const Chats = () => {
                     </SimpleBarStyle>
                 </Stack>
             </Stack>
-
         </Box>
     )
 }

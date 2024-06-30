@@ -37,6 +37,9 @@ export function ToggleSidebar() {
 
 export function UpdateSidebarType(type) {
     return async () => {
-        dispatch(slice.actions.updateSidebarType({ type, }))
+        dispatch(
+            // here updateSidebarType is the action which is used to update the type of the sidebar
+            slice.actions.updateSidebarType({ type, })
+        )
     }
 }

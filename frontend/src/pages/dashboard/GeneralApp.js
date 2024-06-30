@@ -5,6 +5,8 @@ import Conversation from "../../components/Conversation";
 import { useTheme } from "@mui/material/styles";
 import Contact from "../../components/Contact";
 import { useSelector } from "react-redux";
+import SharedMessages from "../../components/SharedMessages";
+import StarredMessages from "../../components/StarredMessages";
 
 
 const GeneralApp = () => {
@@ -22,8 +24,27 @@ const GeneralApp = () => {
         <Conversation />
       </Box>
 
+      {console.log(sidebar.type === "CONTACT")}
+      {console.log(sidebar.type)}
+
       {/* contact / sidebar */}
-      {sidebar.open && <Contact />}
+      {/* here I have implemented imiditily invoked function expression {IIFE} to render the sidebar component based on the type of the sidebar */}
+      {sidebar.open &&
+        (() => {
+          console.log(sidebar.type === "CONTACT")
+          switch (sidebar.type) {
+            case 'CONTACT':
+              return <Contact />;
+            case 'STARRED':
+              // return <StarredMessages />;
+              break;
+            case "SHARED":
+              return <SharedMessages />;
+            default:
+              return <Contact />;
+          }
+        })()
+      }
     </Stack>
   );
 };
