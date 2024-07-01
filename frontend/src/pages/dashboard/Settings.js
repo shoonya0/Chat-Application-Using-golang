@@ -1,11 +1,22 @@
 import React from 'react'
 import { Avatar, Box, Divider, IconButton, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { Bell, CaretLeft, Divide, Image, Info, Key, Keyboard, Lock, Note, PencilCircle } from 'phosphor-react';
+import { Bell, CaretLeft, Image, Info, Key, Keyboard, Lock, Note, PencilCircle } from 'phosphor-react';
 import { faker } from '@faker-js/faker';
+import Shortcuts from '../../sections/settings/Shortcuts';
 
 const Settings = () => {
   const theme = useTheme();
+
+  const [openShortcuts, setOpenShortcuts] = React.useState(false);
+
+  const handleOpenShortcuts = () => {
+    setOpenShortcuts(true);
+  }
+
+  const handleCloseShortcuts = () => {
+    setOpenShortcuts(false);
+  }
 
   const list = [
     {
@@ -49,8 +60,7 @@ const Settings = () => {
       key: 6,
       icon: <Keyboard size={20} />,
       title: "Keyboard Shortcuts",
-      // onclick: handleOpenShortcuts,
-      onclick: () => { },
+      onclick: handleOpenShortcuts,
     },
     {
       key: 7,
@@ -92,20 +102,23 @@ const Settings = () => {
             </Stack>
             {/* different options */}
             <Stack spacing={4}>
-              {list.map(({ key, icon, title, onclick }) => <>
-                <Stack sx={{ cursor: "pointer" }} spacing={2} onclick={onclick}>
-                  <Stack direction={"row"} spacing={2} alignItems="center">
-                    {icon}
-                    <Typography variant="body2"> {title} </Typography>
+              {list.map(({ key, icon, title, onclick }) => (
+                <>
+                  <Stack sx={{ cursor: "pointer" }} spacing={2} onClick={onclick}>
+                    <Stack direction={"row"} spacing={2} alignItems="center">
+                      {icon}
+                      <Typography variant="body2"> {title} </Typography>
+                    </Stack>
+                    {key !== 7 && <Divider />}
                   </Stack>
-                  {key !== 7 && <Divider />}
-                </Stack>
-              </>)}
+                </>
+              ))}
             </Stack>
           </Stack>
         </Box>
         {/* RightPanel */}
       </Stack>
+      {openShortcuts && <Shortcuts open={openShortcuts} handleClose={handleCloseShortcuts} />}
     </>
   )
 }
