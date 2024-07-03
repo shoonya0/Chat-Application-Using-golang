@@ -7,6 +7,7 @@ import DashboardLayout from "../layouts/dashboard";
 // config
 import { DEFAULT_PATH } from "../config";
 import LoadingScreen from "../components/LoadingScreen";
+import AuthLayout from "../layouts/main";
 
 const Loadable = (Component) => (props) => {
   return (
@@ -18,6 +19,14 @@ const Loadable = (Component) => (props) => {
 
 export default function Router() {
   return useRoutes([
+    {
+      // here i have group all the auth routes
+      path: "/auth",
+      element: <AuthLayout />,
+      children: [
+        { element: <LoginPage />, path: "login" }
+      ]
+    },
     {
       path: "/",
       element: <DashboardLayout />,
@@ -34,10 +43,7 @@ export default function Router() {
   ]);
 }
 
-const GeneralApp = Loadable(
-  lazy(() => import("../pages/dashboard/GeneralApp")),
-);
-const Settings = Loadable(
-  lazy(() => import("../pages/dashboard/Settings")),
-);
+const GeneralApp = Loadable(lazy(() => import("../pages/dashboard/GeneralApp")));
+const Settings = Loadable(lazy(() => import("../pages/dashboard/Settings")));
+const LoginPage = Loadable(lazy(() => import("../pages/auth/Login")));
 const Page404 = Loadable(lazy(() => import("../pages/Page404")));
