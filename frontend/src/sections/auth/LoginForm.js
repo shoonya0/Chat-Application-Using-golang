@@ -2,6 +2,7 @@ import React from 'react'
 import * as Yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { Link as RouterLink } from "react-router-dom"
 
 import FormProvider from '../../components/hook-form/FormProvider'
 import { Alert, Button, IconButton, InputAdornment, Link, Stack } from '@mui/material'
@@ -18,8 +19,8 @@ const LoginForm = () => {
   });
 
   const defaultValues = {
-    email: "demo@tawk.com",
-    password: "demo1234"
+    email: "Chat@App.com",
+    password: "Chat1234"
   };
 
   const methods = useForm({
@@ -27,7 +28,9 @@ const LoginForm = () => {
     defaultValues,
   });
 
-  const { reset, setError, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful } } = methods
+  const { reset, setError, handleSubmit, formState: { errors,
+    // isSubmitting, isSubmitSuccessful 
+  } } = methods
 
   const onSubmit = async (data) => {
     try {
@@ -59,7 +62,7 @@ const LoginForm = () => {
         />
       </Stack>
       <Stack alignItems={"flex-end"} sx={{ my: 2 }}>
-        <Link variant="body2" color="inherit" underline="always">
+        <Link variant="body2" color="inherit" underline="always" to="/auth/reset-password" component={RouterLink}>
           Forgot Password?
         </Link>
       </Stack>

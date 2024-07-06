@@ -22,8 +22,8 @@ const RigesterForm = () => {
   const defaultValues = {
     firstName: "",
     lastName: "",
-    email: "demo@tawk.com",
-    password: "demo1234"
+    email: "Chat@App.com",
+    password: "Chat1234"
   };
 
   const methods = useForm({
@@ -31,7 +31,9 @@ const RigesterForm = () => {
     defaultValues,
   });
 
-  const { reset, setError, handleSubmit, formState: { errors, isSubmitting, isSubmitSuccessful } } = methods
+  const { reset, setError, handleSubmit, formState: { errors,
+    //  isSubmitting, isSubmitSuccessful 
+  } } = methods
 
   const onSubmit = async (data) => {
     try {
