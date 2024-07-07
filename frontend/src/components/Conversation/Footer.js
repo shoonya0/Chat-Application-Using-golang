@@ -60,22 +60,22 @@ const ChatInput = ({ setOpenPiker }) => {
                             position: "relative",
                             display: openActions ? "inline-block" : "none"
                         }}>
-                            {Action.map((ele) => (
-                                <Tooltip title={ele.title} placement="right" >
+                            {Action.map((ele, index) => (
+                                <Tooltip key={index} title={ele.title} placement="right" >
                                     <Fab sx={{ position: "absolute", top: -ele.y, backgroundColor: ele.color }}>
                                         {ele.icon}
                                     </Fab>
                                 </Tooltip>
                             ))}
                         </Stack>
-                        <InputAdornment>
+                        <InputAdornment position="end">
                             <IconButton onClick={() => setOpenActions((preVal) => !preVal)}>
                                 <LinkSimple />
                             </IconButton>
                         </InputAdornment>
                     </Stack >,
                 endAdornment:
-                    <InputAdornment>
+                    <InputAdornment position="end">
                         <IconButton onClick={() => { setOpenPiker((prevVal) => !prevVal); }}>
                             <Smiley />
                         </IconButton>

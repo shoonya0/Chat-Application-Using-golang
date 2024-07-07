@@ -24,9 +24,6 @@ const GeneralApp = () => {
         <Conversation />
       </Box>
 
-      {console.log(sidebar.type === "CONTACT")}
-      {console.log(sidebar.type)}
-
       {/* contact / sidebar */}
       {/* here I have implemented imiditily invoked function expression {IIFE} to render the sidebar component based on the type of the sidebar */}
       {sidebar.open &&

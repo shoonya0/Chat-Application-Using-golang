@@ -39,8 +39,8 @@ const MessageOptions = () => {
 			/>
 			<Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button', }}>
 				<Stack spacing={1} px={1}>
-					{Message_options.map((ele) => (
-						<MenuItem onClick={handleClick}>{ele.title}</MenuItem>
+					{Message_options.map((ele, index) => (
+						<MenuItem key={index} onClick={handleClick}>{ele.title}</MenuItem>
 					))}
 				</Stack>
 			</Menu>

@@ -61,7 +61,7 @@ const RigesterForm = () => {
         <RHFTextField name="password" label="password" type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
-              <InputAdornment>
+              <InputAdornment position="start">
                 <IconButton onClick={() => {
                   setShowPassword(!showPassword);
                 }}>

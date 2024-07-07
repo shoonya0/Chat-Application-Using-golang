@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 // import { Link as RouterLink } from "react-router-dom"
 
 import FormProvider from '../../components/hook-form/FormProvider'
-import { Alert, Button, IconButton, InputAdornment, Link, Stack } from '@mui/material'
+import { Alert, Button, IconButton, InputAdornment, Stack } from '@mui/material'
 import { RHFTextField } from '../../components/hook-form'
 import { Eye, EyeSlash } from 'phosphor-react'
 
@@ -49,7 +49,7 @@ const NewPasswordForm = () => {
         <RHFTextField name="newPassword" label="New Password" type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
-              <InputAdornment>
+              <InputAdornment position="start">
                 <IconButton onClick={() => {
                   setShowPassword(!showPassword);
                 }}>
@@ -62,7 +62,7 @@ const NewPasswordForm = () => {
         <RHFTextField name="confirmPassword" label="confirm Password" type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
-              <InputAdornment>
+              <InputAdornment position="start">
                 <IconButton onClick={() => {
                   setShowPassword(!showPassword);
                 }}>

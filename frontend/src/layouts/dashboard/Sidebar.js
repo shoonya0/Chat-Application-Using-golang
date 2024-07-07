@@ -11,7 +11,6 @@ import Logo from "../../assets/Images/logo.ico";
 // this is the faker js library used to generate fake data
 import { faker } from "@faker-js/faker"
 
-
 const Sidebar = () => {
     const theme = useTheme();
 
@@ -52,7 +51,7 @@ const Sidebar = () => {
                         {/* here we have imported and ther rendering our icon by using metarial Ui component*/}
                         {Nav_Buttons.map((el) => (
                             el.index === selected ?
-                                <Box sx={{ backgroundColor: theme.palette.primary.main, borderRadius: 1.5 }} p={1}>
+                                <Box key={el.index} sx={{ backgroundColor: theme.palette.primary.main, borderRadius: 1.5 }} p={1}>
                                     <IconButton sx={{ width: "max-content", color: "#fff" }} key={el.index}> {el.icon} </IconButton>
                                 </Box>
                                 :
@@ -81,7 +80,7 @@ const Sidebar = () => {
                 {/* Avatar */}
                 <Stack spacing={4}>
                     {/* switch */}
-                    <AntSwitch defaultChecked onChange={() => { onToggleMode() }} />
+                    <AntSwitch defaultChecked onChange={onToggleMode} />
                     <Avatar id="basic-button" aria-controls={open ? 'basic-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
@@ -89,8 +88,8 @@ const Sidebar = () => {
                     <Menu id="basic-menu" anchorEl={anchorEl} open={open} onClose={handleClose} MenuListProps={{ 'aria-labelledby': 'basic-button', }}
                         transformOrigin={{ vertical: "bottom", horizontal: "left" }} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
                         <Stack spacing={1} px={1}>
-                            {Profile_Menu.map((ele) => (
-                                <MenuItem onClick={handleClick}>
+                            {Profile_Menu.map((ele, index) => (
+                                <MenuItem key={index} onClick={handleClick}>
                                     <Stack sx={{ width: 100 }} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
                                         <span>{ele.title}</span>
                                         {ele.icon}
