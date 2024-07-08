@@ -6,24 +6,28 @@ import PropTypes from "prop-types";
 import { useFormContext, Controller } from "react-hook-form";
 
 // @material-ui/core components
-import { TextField } from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 
 // prop-types is a library for typechecking of props genrally used for validation
-RHFTextField.propTypes = {
+RHFAutoComplete.propTypes = {
     name: PropTypes.string,
     label: PropTypes.string,
     helperText: PropTypes.node,
 }
 
-export default function RHFTextField({ name, label, helperText, ...other }) {
+export default function RHFAutoComplete({ name, label, helperText, ...other }) {
 
-    const { control } = useFormContext();
+    const { control, setValue } = useFormContext();
 
     return (
         <Controller name={name} control={control} render={({ field, fieldState: { error } }) => (
-            <TextField {...field} fullWidth
+            <Autocomplete {...field} fullWidth
                 value={typeof field.value === "number" && field.value === 0 ? "" : field.value}
-                error={!!error} helperText={error ? error.message : helperText} label={label} {...other}
+                onChange={(event, newValue) => setValue(name, newValue, { shouldValidate: true })}
+                error={!!error}  {...other}
+                renderInput={(params) => (
+                    <TextField label={label} error={!!error} helperText={error ? error.message : helperText} {...params} />
+                )}
             />
         )} />
     )

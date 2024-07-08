@@ -6,9 +6,19 @@ import { useTheme } from '@emotion/react'
 import { SimpleBarStyle } from '../../components/Scrollbar'
 import { ChatList } from '../../data'
 import ChatElement from '../../components/ChatElement'
+import CreateGroup from '../../sections/main/CreateGroup'
 
 const Group = () => {
   const theme = useTheme();
+
+  // state management for the dialog
+  const [openDialog, setOpenDialog] = React.useState(false);
+
+  // handel close fuctions
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  }
+
   return (
     <>
       <Stack direction={"row"} sx={{ width: "100%" }}>
@@ -35,7 +45,7 @@ const Group = () => {
 
             <Stack direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
               <Typography variant="subtitle2" component={Link}>Create New Group</Typography>
-              <IconButton><Plus style={{ color: theme.palette.primary.main }} /></IconButton>
+              <IconButton onClick={() => setOpenDialog(true)}><Plus style={{ color: theme.palette.primary.main }} /></IconButton>
             </Stack>
             <Divider />
 
@@ -66,6 +76,7 @@ const Group = () => {
         {/* right */}
         {/* Todo -> reuse conversion component */}
       </Stack>
+      {openDialog && <CreateGroup open={openDialog} handleClose={handleCloseDialog} />}
     </>
   )
 }
