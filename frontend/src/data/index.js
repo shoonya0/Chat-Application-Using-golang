@@ -46,7 +46,100 @@ const Nav_Setting = [
   },
 ];
 
+const MembersList = [
+  {
+    id: 0,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    online: true,
+  },
+  {
+    id: 1,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    online: false,
+  },
+  {
+    id: 2,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    online: true,
+  },
+  {
+    id: 3,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    online: true,
+  },
+  {
+    id: 4,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    online: true,
+  },
+  {
+    id: 5,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    online: false,
+  },
+  {
+    id: 6,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    online: true,
+  },
+  {
+    id: 7,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+  },
+];
 
+const CallLogs = [
+  {
+    id: 0,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    missed: false,
+    incoming: true,
+  },
+  {
+    id: 1,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    missed: false,
+    incoming: false,
+  },
+  {
+    id: 2,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    missed: true,
+    incoming: true,
+  },
+  {
+    id: 3,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    missed: false,
+    incoming: true,
+  },
+  {
+    id: 4,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    missed: true,
+    incoming: false,
+  },
+  {
+    id: 5,
+    img: faker.image.avatar(),
+    name: faker.name.fullName(),
+    missed: true,
+    incoming: true,
+  },
+]
 
 // fake data for chat list
 const ChatList = [
@@ -300,6 +393,8 @@ export {
   Profile_Menu,
   Nav_Setting,
   Nav_Buttons,
+  MembersList,
+  CallLogs,
   ChatList,
   Chat_History,
   Message_options,
