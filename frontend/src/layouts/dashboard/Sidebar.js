@@ -6,13 +6,31 @@ import { Nav_Buttons, Profile_Menu } from "../../data";
 import { Gear } from 'phosphor-react';
 import AntSwitch from '../../components/AntSwitch';
 import Logo from "../../assets/Images/logo.ico";
-
+import { useNavigate } from "react-router-dom";
 
 // this is the faker js library used to generate fake data
 import { faker } from "@faker-js/faker"
 
+const getPath = (index) => {
+    switch (index) {
+        case 0:
+            return "/app";
+        case 1:
+            return "/group";
+        case 2:
+            return "/call";
+        case 3:
+            return "/settings";
+        default:
+            break;
+    }
+}
+
 const Sidebar = () => {
     const theme = useTheme();
+
+    // this is the react hook used to navigate to the different pages
+    const navigate = useNavigate();
 
     // React hook used to manage the state of the selected button
     const [selected, setSelected] = React.useState(0);
@@ -55,7 +73,7 @@ const Sidebar = () => {
                                     <IconButton sx={{ width: "max-content", color: "#fff" }} key={el.index}> {el.icon} </IconButton>
                                 </Box>
                                 :
-                                <IconButton onClick={() => setSelected(el.index)} sx={{ width: "max-content", color: theme.palette.mode === "light" ? "#000" : theme.palette.text.primary }} key={el.index}> {el.icon} </IconButton>
+                                <IconButton onClick={() => { setSelected(el.index); navigate(getPath(el.index)) }} sx={{ width: "max-content", color: theme.palette.mode === "light" ? "#000" : theme.palette.text.primary }} key={el.index}> {el.icon} </IconButton>
 
                         ))}
 
@@ -70,7 +88,7 @@ const Sidebar = () => {
                                 </IconButton>
                             </Box>
                             :
-                            <IconButton onClick={() => setSelected(3)} sx={{ width: "max-content", color: theme.palette.mode === "light" ? "#000" : theme.palette.text.primary }}>
+                            <IconButton onClick={() => { setSelected(3); navigate(getPath(3)) }} sx={{ width: "max-content", color: theme.palette.mode === "light" ? "#000" : theme.palette.text.primary }}>
                                 <Gear />
                             </IconButton>
                         }
