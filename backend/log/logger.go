@@ -13,8 +13,11 @@ type ResponseRecorder struct {
 	Body       []byte
 }
 
+// here we are creating a function of type ResponseRecorder (struct) and this method only takes single parameter statusCode
 func (rec *ResponseRecorder) WriteHeader(statusCode int) {
+	// here we are setting the status code of the response to the statusCode that we are passing
 	rec.StatusCode = statusCode
+	// here we are calling the WriteHeader method of the ResponseWriter interface which will set the status code of the response
 	rec.ResponseWriter.WriteHeader(statusCode)
 }
 

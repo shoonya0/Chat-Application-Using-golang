@@ -122,7 +122,7 @@ const Sidebar = () => {
             transformOrigin={{ vertical: "bottom", horizontal: "left" }} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
             <Stack spacing={1} px={1}>
               {Profile_Menu.map((ele, index) => (
-                <MenuItem key={index} onClick={handleClick}>
+                <MenuItem key={index} onClick={() => { handleClick(index) }}>
                   <Stack onClick={() => { navigate(getMenuPath(index)) }} sx={{ width: 100 }} direction={"row"} alignItems={"center"} justifyContent={"space-between"}>
                     <span>{ele.title}</span>
                     {ele.icon}
