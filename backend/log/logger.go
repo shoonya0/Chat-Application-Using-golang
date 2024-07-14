@@ -4,36 +4,41 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 )
 
+// ResponseRecorder for Gin
 type ResponseRecorder struct {
-	http.ResponseWriter
-	StatusCode int
+	gin.ResponseWriter
 	Body       []byte
+	StatusCode int
 }
 
-// here we are creating a function of type ResponseRecorder (struct) and this method only takes single parameter statusCode
-func (rec *ResponseRecorder) WriteHeader(statusCode int) {
-	// here we are setting the status code of the response to the statusCode that we are passing
-	rec.StatusCode = statusCode
-	// here we are calling the WriteHeader method of the ResponseWriter interface which will set the status code of the response
-	rec.ResponseWriter.WriteHeader(statusCode)
-}
-
+// Write method to capture response body
 func (rec *ResponseRecorder) Write(body []byte) (int, error) {
 	rec.Body = body
 	return rec.ResponseWriter.Write(body)
 }
 
-func HttpLogger(handler http.Handler) http.Handler {
-	return http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+// WriteHeader method to capture status code
+func (rec *ResponseRecorder) WriteHeader(statusCode int) {
+	rec.StatusCode = statusCode
+	rec.ResponseWriter.WriteHeader(statusCode)
+}
+
+// HttpLogger middleware for Gin
+func HttpLogger() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		startTime := time.Now()
 		rec := &ResponseRecorder{
-			ResponseWriter: res,
+			ResponseWriter: c.Writer,
 			StatusCode:     http.StatusOK,
 		}
-		handler.ServeHTTP(rec, req)
+		c.Writer = rec
+
+		c.Next()
+
 		duration := time.Since(startTime)
 
 		logger := log.Info()
@@ -42,11 +47,11 @@ func HttpLogger(handler http.Handler) http.Handler {
 		}
 
 		logger.Str("protocol", "http").
-			Str("method", req.Method).
-			Str("path", req.RequestURI).
+			Str("method", c.Request.Method).
+			Str("path", c.Request.RequestURI).
 			Int("status_code", rec.StatusCode).
 			Str("status_text", http.StatusText(rec.StatusCode)).
 			Dur("duration", duration).
-			Msg("received a HTTP request")
-	})
+			Msg("received an HTTP request")
+	}
 }

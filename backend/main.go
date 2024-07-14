@@ -1,6 +1,7 @@
 package main
 
 import (
+	"chat-server/middleware"
 	rateLimiter "chat-server/utils"
 	"log"
 	"os"
@@ -26,8 +27,10 @@ func main() {
 	}
 
 	// here we use rate limiter middleware to limit the number of requests that can be made to the server
-	// r.Use(ratelimiter.RateLimiterMiddleware(rateLimit, burst))
 	r.Use(rateLimiter.RateLimiterMiddleware(rateLimit, burst))
+
+	// Apply security headers middleware
+	r.Use(middleware.SecurityHeadersMiddleware())
 
 	if err := r.Run(": " + port); err != nil {
 		log.Fatalf("\n \nError while running the server -> %v", err)
