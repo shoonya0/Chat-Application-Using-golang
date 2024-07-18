@@ -11,6 +11,8 @@ func SecurityHeadersMiddleware() gin.HandlerFunc {
 		c.Writer.Header().Set("X-XSS-Protection", "1; mode=block")
 		c.Writer.Header().Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 		c.Writer.Header().Set("Referrer-Policy", "no-referrer")
+		c.Writer.Header().Set("Feature-Policy", "camera 'none'; microphone 'none'; geolocation 'none'")
+
 		c.Next()
 	}
 }
