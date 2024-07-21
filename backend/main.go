@@ -49,6 +49,9 @@ func main() {
 	// Apply cors middleware
 	r.Use(middleware.CrorsMiddleware())
 
+	// Apply recovery middleware
+	r.Use(middleware.Recovery())
+
 	// remaining
 	// body-parser middleware is used to parse the request body and set the body field in the request object
 	// cors middleware is used to enable cross-origin resource sharing

@@ -1,0 +1,176 @@
+Each building has a specific height (a[i]), but all the buildings are the same width (of 1 unit). Initially adjacent buildings can have same height.
+
+You can make them taller by adding floors on top. The cost to add one floor to the i-th building is b[i] rupees.
+
+You want to make the buildings different heights, but no two buildings next to each other can be the same height. In other words, for every building from the second one onwards (buildings 2 to n), the building before it (building i-1) cannot be the same height (a[i-1] ≠ a[i]).
+
+Find the minimum total cost it takes to make all the buildings different heights while following this rule.
+
+Input Format
+
+The first line contains N, number of buildings.
+
+Following n lines contains a[i] and b[i] - the height of the ith building (a[i]) and the price (b[i]) to increase it by 1, respectively.
+
+Constraints
+
+1 <= N <= 300000
+
+1 <= ai, bi, <= 1e9
+
+Output Format
+
+Single line integer, minimum cost you have to pay to make all buildings have different heights.
+
+It is gauranteed that answer will not exceed 1e18.
+
+Sample Input 0
+
+3
+2 4
+2 1
+3 5
+
+
+Sample Output 0
+
+2
+
+
+Sample Input 1
+
+3
+2 3
+2 10
+2 6
+
+
+Sample Output 1
+
+9
+
+
+Sample Input 2
+
+4
+1 7
+3 3
+2 6
+1000000000 2
+
+
+Sample Output 2
+
+0
+Copilot
+Sent by Copilot:
+To solve this problem, we need to ensure that no two adjacent buildings have the same height while minimizing the cost of adding floors. Here’s a step-by-step approach to achieve this:
+
+Dynamic Programming (DP) Approach:
+We’ll use a DP array where dp[i][j] represents the minimum cost to make the first i buildings different heights, with the i-th building having j additional floors.
+j can be 0, 1, or 2, representing the current height, one floor added, or two floors added, respectively.
+Transition:
+For each building, we need to ensure that its height is different from the previous building’s height.
+We’ll calculate the cost for each possible height and update our DP array accordingly.
+Initialization:
+Initialize the DP array for the first building with the cost of adding 0, 1, or 2 floors.
+Result:
+The result will be the minimum value in the last row of the DP array.
+Here’s the Python code to implement this approach:
+
+Python
+
+def min_cost_to_make_heights_different(n, buildings):
+    # Initialize DP array
+    dp = [[float('inf')] * 3 for _ in range(n)]
+    
+    # Base case for the first building
+    dp[0][0] = 0
+    dp[0][1] = buildings[0][1]
+    dp[0][2] = 2 * buildings[0][1]
+    
+    # Fill the DP array
+    for i in range(1, n):
+        for j in range(3):
+            for k in range(3):
+                if buildings[i][0] + j != buildings[i-1][0] + k:
+                    dp[i][j] = min(dp[i][j], dp[i-1][k] + j * buildings[i][1])
+    
+    # The answer is the minimum cost for the last building
+    return min(dp[n-1])
+
+# Sample Input
+n = 3
+buildings = [(2, 4), (2, 1), (3, 5)]
+print(min_cost_to_make_heights_different(n, buildings))  # Output: 2
+
+# Sample Input
+n = 3
+buildings = [(2, 3), (2, 10), (2, 6)]
+print(min_cost_to_make_heights_different(n, buildings))  # Output: 9
+
+# Sample Input
+n = 4
+buildings = [(1, 7), (3, 3), (2, 6), (1000000000, 2)]
+print(min_cost_to_make_heights_different(n, buildings))  # Output: 0
+AI-generated code. Review and use carefully. More info on FAQ.
+This code initializes the DP array, fills it based on the given constraints, and finally returns the minimum cost to make all buildings have different heights. You can test it with the provided sample inputs to verify its correctness.
+
+You
+Sent by you:
+convert it into c++
+Copilot
+Sent by Copilot:
+Sure! Here’s the equivalent C++ code for the problem:
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+long long min_cost_to_make_heights_different(int n, vector<pair<int, int>>& buildings) {
+    // Initialize DP array
+    vector<vector<long long>> dp(n, vector<long long>(3, LLONG_MAX));
+    
+    // Base case for the first building
+    dp[0][0] = 0;
+    dp[0][1] = buildings[0].second;
+    dp[0][2] = 2 * buildings[0].second;
+    
+    // Fill the DP array
+    for (int i = 1; i < n; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                if (buildings[i].first + j != buildings[i-1].first + k) {
+                    dp[i][j] = min(dp[i][j], dp[i-1][k] + j * buildings[i].second);
+                }
+            }
+        }
+    }
+    
+    // The answer is the minimum cost for the last building
+    return min({dp[n-1][0], dp[n-1][1], dp[n-1][2]});
+}
+
+int main() {
+    // Sample Input
+    int n = 3;
+    vector<pair<int, int>> buildings = {{2, 4}, {2, 1}, {3, 5}};
+    cout << min_cost_to_make_heights_different(n, buildings) << endl;  // Output: 2
+
+    // Sample Input
+    n = 3;
+    buildings = {{2, 3}, {2, 10}, {2, 6}};
+    cout << min_cost_to_make_heights_different(n, buildings) << endl;  // Output: 9
+    
+    // Sample Input
+    n = 4;
+    buildings = {{1, 7}, {3, 3}, {2, 6}, {1000000000, 2}};
+    cout << min_cost_to_make_heights_different(n, buildings) << endl;  // Output: 0
+
+    return 0;
+}
+
+This C++ code follows the same logic as the Python code, using dynamic programming to ensure no two adjacent buildings have the same height while minimizing the cost. You can test it with the provided sample inputs to verify its correctness. If you have any questions or need further assistance, feel free to ask!
