@@ -1,6 +1,7 @@
 package main
 
 import (
+	db "chat-server/DB"
 	"chat-server/logger"
 	"chat-server/middleware"
 	"fmt"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/time/rate"
 )
 
@@ -49,8 +51,25 @@ func main() {
 	// Apply recovery middleware
 	r.Use(middleware.Recovery())
 
+	// connect to the database
+	r.Use(db.DBConnection())
+
 	// to apply ratelimiter in a request
 	r.GET("/limited", middleware.RateLimiterMiddleware(rateLimit, burst), func(c *gin.Context) {
+		// client, err := db.InitDB(c)
+		// if err != nil {
+		// 	c.JSON(500, gin.H{"error": err.Error()})
+		// 	return
+		// }
+		// defer client.Disconnect(c)
+		client, exists := c.Get("mongoClient")
+		if !exists {
+			c.JSON(500, gin.H{"error": "Database connection not found"})
+			return
+		}
+
+		// Use the shared mongoClient
+		_ = client.(*mongo.Client) // Type assertion
 
 		c.JSON(200, gin.H{
 			"message": "This route is rate-limited",
