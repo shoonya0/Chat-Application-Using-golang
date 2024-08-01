@@ -103,6 +103,7 @@ func main() {
 	if os.Getenv("GIN_MODE") == "development" {
 		log.Println("Logger enabled")
 		gin.SetMode(gin.DebugMode)
+		// this is also works with goroutine
 		r.Use(logger.HttpLogger())
 	} else {
 		log.Println("Logger disabled")
