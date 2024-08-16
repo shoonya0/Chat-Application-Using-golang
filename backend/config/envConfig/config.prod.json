@@ -1,0 +1,23 @@
+{
+"SERVER_ADDRESS" : "0.0.0.0:8080",
+"APP_ENV":"PRODUCTION",
+"BACKEND_PORT" : "3130",
+"DB_HOST" : "localhost",
+"DB_PORT" : "5432",
+"DB_URI" : "mongodb+srv://krish200599:<password>@cluster0.vhpnw1p.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+"DB_NAME" : "ChatAppDataBase",
+"DB_USER" : "krish200599",
+"DB_PASS" : "bq0TIoDXz7H0lEkp",
+"CONTEXT_TIMEOUT" : 2,
+"ACCESS_TOKEN_EXPIRY_HOUR" : 2,
+"REFRESH_TOKEN_EXPIRY_HOUR" : 2,
+"ACCESS_TOKEN_SECRET" : "PbNOzMInKapYTSx11xTTZvaUfzfSpcVg6R6Q7BTv48",
+"REFRESH_TOKEN_SECRET" : "DSAJKJNF",
+
+"CACHE_HOST" : "localhost",
+"CACHE_PORT" : "6379",
+"CACHE_TTL" : 3600,
+"STORAGE_BUCKET_NAME" : "your_bucket_name",
+"STORAGE_ACCESS_KEY" : "your_storage_access_key",
+"STORAGE_SECRET_KEY" : "your_storage_secret_key"
+}

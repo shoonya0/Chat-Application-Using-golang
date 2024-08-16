@@ -1,9 +1,11 @@
 package main
 
 import (
-	db "chat-server/DB"
+	"chat-server/config"
+	"chat-server/db"
 	"chat-server/logger"
 	"chat-server/middleware"
+	"chat-server/object"
 	"fmt"
 	"log"
 	"os"
@@ -11,7 +13,6 @@ import (
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/time/rate"
 )
@@ -21,13 +22,23 @@ var (
 	burst     = 10             // Allow 10 burst for immediate requests
 )
 
+func init() {
+	if config.New() != nil {
+		log.Fatalf("Error while loading the config -> %v", config.New())
+		os.Exit(1)
+	}
+}
+
 func main() {
-	// Load the environment variables from the .env file
-	godotenv.Load("config.env")
-	// os.Setenv("PORT", "8011")
-	port := os.Getenv("PORT")
+	port := object.GlobalConfig.BackendPort
 	if port == "" {
-		port = "8085"
+		port = "3031"
+	}
+
+	// connect to the database
+	if err := db.InitDB(); err != nil {
+		// logger needed
+		fmt.Println("Error while connecting to the database -> ", err)
 	}
 
 	// Starting the error handling routine
@@ -50,9 +61,6 @@ func main() {
 
 	// Apply recovery middleware
 	r.Use(middleware.Recovery())
-
-	// connect to the database
-	r.Use(db.DBConnection())
 
 	// to apply ratelimiter in a request
 	r.GET("/limited", middleware.RateLimiterMiddleware(rateLimit, burst), func(c *gin.Context) {
@@ -100,15 +108,13 @@ func main() {
 	}()
 
 	// Apply logging middleware and running the server
-	if os.Getenv("GIN_MODE") == "development" {
+	if object.GlobalConfig.AppEnv == "DEVELOPMENT" || object.GlobalConfig.AppEnv == "PRE_PRODUCTION" {
 		log.Println("Logger enabled")
-		gin.SetMode(gin.DebugMode)
 		// this is also works with goroutine
 		r.Use(logger.HttpLogger())
 	} else {
 		log.Println("Logger disabled")
-		gin.SetMode(gin.ReleaseMode)
-		r.Use(gin.Logger())
+		r.Use(logger.HttpLogger())
 	}
 
 	if err := r.Run(": " + port); err != nil {

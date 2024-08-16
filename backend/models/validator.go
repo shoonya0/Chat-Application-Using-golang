@@ -8,29 +8,8 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-// ValidateUser validates the User struct and parses time fields
+// ValidateUser validates the User struct
 func ValidateUser(user *UserSchema) error {
-
-	// Parse time fields
-	timeFields := []*CustomTime{
-		&user.PasswordChangeAt,
-		&user.PasswordResetExpires,
-		&user.CreatedAt,
-		&user.UpdatedAt,
-	}
-
-	for _, field := range timeFields {
-		if field.Time.IsZero() {
-			continue
-		}
-		parsedTime, err := time.Parse("2006-01-02T15:04:05Z07:00", field.Format("2006-01-02T15:04:05Z07:00"))
-		if err != nil {
-			return fmt.Errorf("invalid time format for field: %v", err)
-		}
-		*field = CustomTime{parsedTime}
-	}
-
-	// Validate struct fields
 	validate := validator.New()
 	err := validate.Struct(user)
 	if err != nil {
