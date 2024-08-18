@@ -7,7 +7,7 @@ import (
 )
 
 // sanitizeMap recursively sanitizes map values
-func sanitizeMap(m map[string]interface{}) {
+func SanitizeMap(m map[string]interface{}) {
 	for key, value := range m {
 		if strings.HasPrefix(key, "$") || strings.Contains(key, ".") {
 			delete(m, key)
@@ -15,21 +15,21 @@ func sanitizeMap(m map[string]interface{}) {
 		}
 		switch v := value.(type) {
 		case map[string]interface{}:
-			sanitizeMap(v)
+			SanitizeMap(v)
 		case []interface{}:
-			sanitizeSlice(v)
+			SanitizeSlice(v)
 		}
 	}
 }
 
 // sanitizeSlice recursively sanitizes slice values
-func sanitizeSlice(s []interface{}) {
+func SanitizeSlice(s []interface{}) {
 	for _, item := range s {
 		switch v := item.(type) {
 		case map[string]interface{}:
-			sanitizeMap(v)
+			SanitizeMap(v)
 		case []interface{}:
-			sanitizeSlice(v)
+			SanitizeSlice(v)
 		}
 	}
 }
@@ -40,8 +40,13 @@ func SanitizeMiddleware() gin.HandlerFunc {
 		if c.Request.Method == "POST" || c.Request.Method == "PUT" {
 			var json map[string]interface{}
 			if err := c.ShouldBindJSON(&json); err == nil {
-				sanitizeMap(json)
+				SanitizeMap(json)
 				c.Set("sanitized_json", json)
+			} else {
+				// Handle the error if JSON binding fails
+				c.JSON(400, gin.H{"error": err.Error()})
+				c.Abort()
+				return
 			}
 		}
 		c.Next()

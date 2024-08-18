@@ -9,11 +9,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/time/rate"
 )
 
@@ -43,9 +40,15 @@ func main() {
 
 	// Starting the error handling routine
 	// here i have make an Goroutines (lightweight thread managed by the Go runtime) to handle the error
-	go middleware.HandleErrors()
+	// go middleware.HandleErrors()
 
-	r := gin.Default()
+	r := gin.New()
+
+	// add default recovery middleware
+	// r.Use(gin.Recovery())
+
+	// add the new logger middleware
+	r.Use(logger.DefaultStructuredLogger())
 
 	// here we use rate limiter middleware to limit the number of requests that can be made to the server
 	r.Use(middleware.RateLimiterMiddleware(rateLimit, burst))
@@ -64,57 +67,53 @@ func main() {
 
 	// to apply ratelimiter in a request
 	r.GET("/limited", middleware.RateLimiterMiddleware(rateLimit, burst), func(c *gin.Context) {
-		// client, err := db.InitDB(c)
-		// if err != nil {
-		// 	c.JSON(500, gin.H{"error": err.Error()})
-		// 	return
-		// }
-		// defer client.Disconnect(c)
-		client, exists := c.Get("mongoClient")
-		if !exists {
+		client := object.MongoClient
+		if client == nil {
 			c.JSON(500, gin.H{"error": "Database connection not found"})
 			return
 		}
-
-		// Use the shared mongoClient
-		_ = client.(*mongo.Client) // Type assertion
 
 		c.JSON(200, gin.H{
 			"message": "This route is rate-limited",
 		})
 	})
 
-	// starting a goroutine within a handler
-	r.GET("/async", func(c *gin.Context) {
-		middleware.SafeGo(func() error {
-			// Simulate some async work
-			fmt.Println("Async operation running")
-			// Simulate an error
-			return fmt.Errorf("error in async operation")
-		})
-		c.String(200, "Async operation started")
-	})
+	// Apply error handling middleware
+	r.Use(middleware.ErrorHandler())
 
-	// Wait for a signal to exit
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
-	// here i have make an Goroutines (lightweight thread managed by the Go runtime) to handle the error
-	go func() {
-		// Wait for the signal
-		<-sigChan
-		// Signal the error handler to exit
-		middleware.DoneChan <- true
-		os.Exit(0)
-	}()
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	// starting a goroutine within a handler
+	// r.GET("/async", func(c *gin.Context) {
+	// 	middleware.SafeGo(func() error {
+	// 		// Simulate some async work
+	// 		fmt.Println("Async operation running")
+	// 		// Simulate an error
+	// 		return fmt.Errorf("error in async operation")
+	// 	})
+	// 	c.String(200, "Async operation started")
+	// })
+
+	// // Wait for a signal to exit
+	// sigChan := make(chan os.Signal, 1)
+	// signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	// // here i have make an Goroutines (lightweight thread managed by the Go runtime) to handle the error
+	// go func() {
+	// 	// Wait for the signal
+	// 	<-sigChan
+	// 	// Signal the error handler to exit
+	// 	middleware.DoneChan <- true
+	// 	os.Exit(0)
+	// }()
 
 	// Apply logging middleware and running the server
 	if object.GlobalConfig.AppEnv == "DEVELOPMENT" || object.GlobalConfig.AppEnv == "PRE_PRODUCTION" {
-		log.Println("Logger enabled")
+		// log.Println("Logger enabled")
 		// this is also works with goroutine
-		r.Use(logger.HttpLogger())
+		// r.Use(logger.HttpLogger())
 	} else {
 		log.Println("Logger disabled")
-		r.Use(logger.HttpLogger())
+		// r.Use(logger.HttpLogger())
 	}
 
 	if err := r.Run(": " + port); err != nil {

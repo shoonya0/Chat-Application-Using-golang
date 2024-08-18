@@ -25,6 +25,6 @@ type config struct {
 	StorageSecretKey       string `mapstructure:"STORAGE_SECRET_KEY"`
 }
 
-var MongoClient *mongo.Client
+var MongoClient *mongo.Client = nil
 
 var GlobalConfig config

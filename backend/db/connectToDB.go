@@ -14,8 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var MongoClient *mongo.Client = nil
-
 func InitDB() error {
 	DB := object.GlobalConfig.DBURI
 
@@ -57,6 +55,6 @@ func InitDB() error {
 		return fmt.Errorf("error setting mgm default config: %v", err)
 	}
 
-	MongoClient = client
+	object.MongoClient = client
 	return nil
 }
