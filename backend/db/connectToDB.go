@@ -45,7 +45,7 @@ func InitDB() error {
 	}
 
 	// logger needed
-	fmt.Println("Pinged your deployment. You successfully connected to MongoDB!")
+	fmt.Println("pinged your deployment. You successfully connected to MongoDB!")
 
 	// initialize mgm default config :: mgm is a wrapper of the mongose driver which
 	// provides predefines all Mongo operators and keys

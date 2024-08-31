@@ -6,6 +6,7 @@ import (
 	"chat-server/logger"
 	"chat-server/middleware"
 	"chat-server/object"
+	"chat-server/routes"
 	"fmt"
 	"log"
 	"os"
@@ -24,18 +25,17 @@ func init() {
 		log.Fatalf("Error while loading the config -> %v", config.New())
 		os.Exit(1)
 	}
+	// connect to the database
+	if err := db.InitDB(); err != nil {
+		// logger needed
+		fmt.Println("Error while connecting to the database -> ", err)
+	}
 }
 
 func main() {
 	port := object.GlobalConfig.BackendPort
 	if port == "" {
 		port = "3031"
-	}
-
-	// connect to the database
-	if err := db.InitDB(); err != nil {
-		// logger needed
-		fmt.Println("Error while connecting to the database -> ", err)
 	}
 
 	// Starting the error handling routine
@@ -47,39 +47,48 @@ func main() {
 	// add default recovery middleware
 	// r.Use(gin.Recovery())
 
-	// add the new logger middleware
-	r.Use(logger.DefaultStructuredLogger())
-
 	// here we use rate limiter middleware to limit the number of requests that can be made to the server
+	fmt.Println("Rate limiter middleware applied")
 	r.Use(middleware.RateLimiterMiddleware(rateLimit, burst))
 
 	// Apply security headers middleware
+	fmt.Println("Security headers middleware applied")
 	r.Use(middleware.SecurityHeadersMiddleware())
 
 	// Apply sanitize middleware in case user add any script in the input
+	fmt.Println("Sanitize middleware applied")
 	r.Use(middleware.SanitizeMiddleware())
 
 	// Apply cors middleware
+	fmt.Println("CORS middleware applied")
 	r.Use(middleware.CrorsMiddleware())
 
 	// Apply recovery middleware
+	fmt.Println("Recovery middleware applied")
 	r.Use(middleware.Recovery())
 
-	// to apply ratelimiter in a request
-	r.GET("/limited", middleware.RateLimiterMiddleware(rateLimit, burst), func(c *gin.Context) {
-		client := object.MongoClient
-		if client == nil {
-			c.JSON(500, gin.H{"error": "Database connection not found"})
-			return
-		}
-
-		c.JSON(200, gin.H{
-			"message": "This route is rate-limited",
-		})
-	})
-
 	// Apply error handling middleware
+	fmt.Println("Error handling middleware applied")
 	r.Use(middleware.ErrorHandler())
+
+	// Apply authentication middleware
+	r.Use(middleware.Authentication())
+
+	// routes
+	routes.UseRoutes(r)
+
+	// // to apply ratelimiter in a request
+	// r.GET("/limited", middleware.RateLimiterMiddleware(rateLimit, burst), func(c *gin.Context) {
+	// 	client := object.MongoClientx
+	// 	if client == nil {
+	// 		c.JSON(500, gin.H{"error": "Database connection not found"})
+	// 		return
+	// 	}
+
+	// 	c.JSON(200, gin.H{
+	// 		"message": "This route is rate-limited",
+	// 	})
+	// })
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -108,9 +117,10 @@ func main() {
 
 	// Apply logging middleware and running the server
 	if object.GlobalConfig.AppEnv == "DEVELOPMENT" || object.GlobalConfig.AppEnv == "PRE_PRODUCTION" {
-		// log.Println("Logger enabled")
 		// this is also works with goroutine
-		// r.Use(logger.HttpLogger())
+		// add the new logger middleware
+		fmt.Println("Logger middleware applied")
+		r.Use(logger.DefaultStructuredLogger())
 	} else {
 		log.Println("Logger disabled")
 		// r.Use(logger.HttpLogger())
